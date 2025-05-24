@@ -66,5 +66,27 @@ pipeline {
                         }
                     }
                 }
+        stage('Package') {
+                    when {
+                        branch: 'master'
+                    }
+                    steps {
+                        sh '''
+                        echo "Pakowanie aplikacji..."
+                        jar cf "app-${BUILD_ID}.jar" -C "${CLASS_DIR}" .
+                        echo "Utworzono: app-${BUILD_ID}.jar"
+                        '''
+                    }
+        }
+        stage('Archive') {
+                    when {
+                        branch: 'master'
+                    }
+                    steps {
+                        echo "Archiwizowanie artefaktów..."
+                        archiveArtifacts artifacts: 'app-*.jar'
+                        archiveArtifacts artifacts: "${REPORT_DIR}/*.xml"
+                    }
+                }
     }
 }
