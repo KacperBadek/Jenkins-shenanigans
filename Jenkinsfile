@@ -53,6 +53,7 @@ pipeline {
                         unstash 'compiled-tests'
                         unstash 'lib-files'
 
+                    script {
                         try {
                             sh '''
                             echo "Uruchamianie testów JUnit 5..."
@@ -64,11 +65,12 @@ pipeline {
                         } finally {
                             junit "${REPORT_DIR}/*.xml"
                         }
+                      }
                     }
                 }
         stage('Package') {
                     when {
-                        branch: 'master'
+                        branch 'master'
                     }
                     steps {
                         sh '''
@@ -80,7 +82,7 @@ pipeline {
         }
         stage('Archive') {
                     when {
-                        branch: 'master'
+                        branch 'master'
                     }
                     steps {
                         echo "Archiwizowanie artefaktów..."
