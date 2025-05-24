@@ -53,13 +53,17 @@ pipeline {
                         unstash 'compiled-tests'
                         unstash 'lib-files'
 
-                        sh '''
-                        echo "Uruchamianie testów JUnit 5..."
-                        java -jar "$LIB_DIR/junit-platform-console-standalone-1.8.1.jar" \
-                            --class-path "$CLASS_DIR:$TEST_DIR:$LIB_DIR/*" \
-                            --scan-class-path \
-                            --reports-dir="$REPORT_DIR"
-                        '''
+                        try{
+                            sh '''
+                            echo "Uruchamianie testów JUnit 5..."
+                            java -jar "$LIB_DIR/junit-platform-console-standalone-1.8.1.jar" \
+                                --class-path "$CLASS_DIR:$TEST_DIR:$LIB_DIR/*" \
+                                --scan-class-path \
+                                --reports-dir="$REPORT_DIR"
+                            '''
+                        } finally {
+                            junit "${REPORT_DIR}/*.xml"
+                        }
                     }
                 }
     }
