@@ -41,11 +41,18 @@ pipeline {
 
                         echo "Kompilacja zakończona pomyślnie."
                         '''
+                        stash name: 'compiled-classes', includes: "${CLASS_DIR}/**"
+                        stash name: 'compiled-tests', includes: "${TEST_DIR}/**"
+                        stash name: 'lib-files', includes: "${LIB_DIR}/**"
                     }
                 }
 
         stage('Test') {
                     steps {
+                        unstash 'compiled-classes'
+                        unstash 'compiled-tests'
+                        unstash 'lib-files'
+
                         sh '''
                         echo "Uruchamianie testów JUnit 5..."
                         java -jar "$LIB_DIR/junit-platform-console-standalone-1.8.1.jar" \
