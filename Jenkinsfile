@@ -53,7 +53,7 @@ pipeline {
                         unstash 'compiled-tests'
                         unstash 'lib-files'
 
-                        try{
+                        try {
                             sh '''
                             echo "Uruchamianie testów JUnit 5..."
                             java -jar "$LIB_DIR/junit-platform-console-standalone-1.8.1.jar" \
